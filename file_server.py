@@ -74,10 +74,10 @@ class Server:
                 "to the server using the <username> and <password> provided\n"
                 "login <username> <password>:                "
                 "Log in the user conforming with <username>\n"
-                "delete <username> <password>                  :"
+                "delete <username> <password>:"
                 "Delete the user conforming with <username> from the server\n"
                 "del <input>:                           ""deletes a directory\n"
-                "mv <filename>:           Move file to the server")
+                "mv <filename>:"                        "Move file to the server")
         return conn.sendall(data.encode("utf-8"))
 
     def load_login_data(self):
@@ -278,8 +278,7 @@ class Server:
                         del self.auth_ip_user[addr]
                         del self.users_current_directory[addr]
                         return conn.sendall("Logged out".encode("utf-8"))
-                elif command == "help":
-                    self.commands(conn)
+
                 elif command.split(" ")[0] == "mv":
                     if len(command.split(" ")) == 2:
                         self.mv(conn, command.split(" ")[1], addr)
@@ -307,6 +306,8 @@ class Server:
                 conn.sendall("Login again".encode("utf-8"))
 
         # if not logged in
+        elif command == "help":
+            self.commands(conn)
         elif command.split(" ")[0] == "login":
             if len(command.split(" ")) == 3:
                 self.login(conn, addr, command.split(" ")[1], command.split(" ")[2])
@@ -319,6 +320,7 @@ class Server:
                 return conn.sendall("Invalid arguments".encode("utf-8"))
         else:
             return conn.sendall("Invalid command. Please login to continue".encode("utf-8"))
+
 
 
 OBJ = Server()
